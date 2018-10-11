@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Services\Email;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -27,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -62,10 +63,22 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'avatar' => 'https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg',
+            'confirmation_token' => md5($data['email']).str_random(40),
             'password' => bcrypt($data['password']),
         ]);
+        if ($user){
+            $data = [
+                'url' => route('email.verify' , [
+                    'token' => $user->confirmation_token
+                ]),
+                'name' => $user->name
+            ];
+            Email::SendCloud($data, $user, 'xiaohtstyle_active');
+        }
+        return $user;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Services\Email;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -15,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'avatar', 'confirmation_token',
     ];
 
     /**
@@ -26,4 +27,21 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $data = [
+            'url' => url('password/reset' , [
+                $token
+            ]),
+        ];
+
+        Email::SendCloud($data, $this, 'xiaohtstyle_reset_password');
+    }
 }
