@@ -16,6 +16,7 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/email/verify/{token}', 'EmailController@verify')->name('email.verify');
+Route::resource('post' , 'PostController');
 
 Route::namespace('Admin')->group(function (){
     Route::group(['prefix' => 'admin'], function() {
