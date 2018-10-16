@@ -1,10 +1,16 @@
-layui.use(['element' , 'form' , 'layedit' , 'util' , 'carousel'], function(){
+layui.config({
+    base: '/fly/layui-formSelects-master/dist/' //此处路径请自行处理, 可以使用绝对路径
+}).extend({
+    formSelects: 'formSelects-v4'
+});
+layui.use(['element' , 'form' , 'layedit' , 'util' , 'carousel' , 'formSelects'], function(){
     var element = layui.element
         , form = layui.form
         , layedit = layui.layedit
         , util = layui.util
         , $ = layui.jquery
-        , carousel = layui.carousel;
+        , carousel = layui.carousel
+        , formSelects = layui.formSelects;
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -65,4 +71,6 @@ layui.use(['element' , 'form' , 'layedit' , 'util' , 'carousel'], function(){
             }
         })
     });
+
+    formSelects.render('layui_select');
 });

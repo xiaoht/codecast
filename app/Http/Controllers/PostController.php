@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Models\Post;
+use App\Http\Models\Topic;
 use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -31,7 +32,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('post.create');
+        $topics = Topic::all();
+        return view('post.create', compact('topics'));
     }
 
     /**
@@ -42,10 +44,15 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
+        $topics = explode(',', $request->get('topic'));
+        dd($topics);
         $data = [
+            'title'   => $request->get('title'),
+            'content' => $request->get('content'),
             'user_id' => Auth::user()->id,
         ];
-        $post = Post::create(array_merge($request->all() , $data));
+        $post = Post::create($data);
+        $post->topics()->attach($topics);
         return redirect()->route('post.show', [$post->id]);
     }
 
@@ -57,7 +64,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::find($id);
+        $post = Post::where('id', $id)->with('topics')->first();
         return view('post.show' , compact('post'));
     }
 
@@ -93,5 +100,36 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * 图片上传
+     * @param Request $request
+     * @return mixed
+     */
+    public function imageUpload(Request $request)
+    {
+        $path = $request->file('file')->storePublicly(md5(Auth::id() . time()));
+        $data['src'] = asset('storage/'. $path);
+        return $this->returnMsg(0,$data,'');
+    }
+
+    public function topics(Request $request)
+    {
+        $result = [];
+        if ($request->get('keyword')){
+            $topics = Topic::where('name', 'like', '%'.$request->get('keyword').'%')->get();
+            $result[] = ['name' => $request->get('keyword'), 'value' => $request->get('keyword')];
+        }else{
+            $topics = Topic::all();
+        }
+
+        foreach ($topics as $v){
+            $result[] = array(
+                'name'  => $v['name'],
+                'value' => $v['id']
+            );
+        }
+        return $this->returnMsg(0, array_merge($result), 'success');
     }
 }

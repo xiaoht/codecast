@@ -7,6 +7,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link href="{{ asset('fly/res/layui/css/layui.css') }}" rel="stylesheet">
     <link href="{{ asset('fly/res/css/global.css') }}" rel="stylesheet">
+    <link href="{{ asset('fly/layui-formSelects-master/dist/formSelects-v4.css') }}" rel="stylesheet">
 </head>
 <body>
 

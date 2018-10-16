@@ -24,6 +24,7 @@ class PostRequest extends FormRequest
     {
         return [
             'title'   => 'required|min:6|max:120',
+            'topic'   => 'required',
             'content' => 'required|min:6',
         ];
     }
