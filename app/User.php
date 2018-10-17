@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Models\Comment;
 use App\Http\Models\Post;
 use App\Http\Services\Email;
 use Illuminate\Notifications\Notifiable;
@@ -52,11 +53,20 @@ class User extends Authenticatable
      */
     public function posts()
     {
-        return $this->hasMany(Post::class , 'user_id' , 'id')->orderBy('created_at' , 'desc');
+        return $this->hasMany(Post::class)->orderBy('created_at' , 'desc');
     }
 
     public function owns($model)
     {
         return (int) $this->id === (int) $model->user_id;
+    }
+
+    /**
+     * 关联comment表
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

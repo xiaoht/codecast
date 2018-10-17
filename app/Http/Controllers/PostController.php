@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Models\Post;
 use App\Http\Requests\PostRequest;
 use App\Repositories\PostRepository;
 use Illuminate\Http\Request;
@@ -155,5 +154,10 @@ class PostController extends Controller
         $posts = $this->postRepository->getPostsByColumn($column);
         $columns = $this->postRepository->getColumns();
         return view('post.column' , compact('posts', 'columns'));
+    }
+
+    public function comment(Request $request, $post)
+    {
+
     }
 }
