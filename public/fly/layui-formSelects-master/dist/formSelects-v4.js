@@ -426,7 +426,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 		}
 		var ajaxConfig = ajaxs[id] ? ajaxs[id] : ajax;
 		var ajaxData = $.extend(true, {}, ajaxConfig.data);
-		ajaxData[ajaxConfig.searchName] = inputValue;
+		ajaxData[ajaxConfig.searchName] = inputValue;$
 		//是否需要对ajax添加随机时间
 		//ajaxData['_'] = Date.now();
 		$.ajax({

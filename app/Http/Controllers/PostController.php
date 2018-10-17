@@ -45,7 +45,7 @@ class PostController extends Controller
     public function store(PostRequest $request)
     {
         $topics = explode(',', $request->get('topic'));
-        dd($topics);
+        $topics = $this->normalizeTopic($topics);
         $data = [
             'title'   => $request->get('title'),
             'content' => $request->get('content'),
@@ -54,6 +54,17 @@ class PostController extends Controller
         $post = Post::create($data);
         $post->topics()->attach($topics);
         return redirect()->route('post.show', [$post->id]);
+    }
+
+    public function normalizeTopic(array $topics)
+    {
+        return collect($topics)->map(function ($topic) {
+            if ( strpos($topic, '/**') === false ) {
+                return (int) $topic;
+            }
+            $newTopic = Topic::create(['name' => explode('/', $topic)[0]]);
+            return $newTopic->id;
+        })->toArray();
     }
 
     /**
@@ -119,7 +130,7 @@ class PostController extends Controller
         $result = [];
         if ($request->get('keyword')){
             $topics = Topic::where('name', 'like', '%'.$request->get('keyword').'%')->get();
-            $result[] = ['name' => $request->get('keyword'), 'value' => $request->get('keyword')];
+            $result[] = ['name' => $request->get('keyword'), 'value' => $request->get('keyword').'/**'];
         }else{
             $topics = Topic::all();
         }
@@ -130,6 +141,6 @@ class PostController extends Controller
                 'value' => $v['id']
             );
         }
-        return $this->returnMsg(0, array_merge($result), 'success');
+        return $this->returnMsg(0, $result, 'success');
     }
 }

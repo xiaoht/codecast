@@ -15,7 +15,6 @@
 
 @include('layouts.nav')
 
-
 <div class="layui-container">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md8">
@@ -32,6 +31,9 @@
 
 <script src="{{ asset('fly/res/layui/layui.js') }}"></script>
 <script src="{{ asset('js/common.js') }}"></script>
+
+@yield('js')
+
 @include('layouts.alert')
 
 </body>

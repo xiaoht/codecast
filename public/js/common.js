@@ -72,5 +72,10 @@ layui.use(['element' , 'form' , 'layedit' , 'util' , 'carousel' , 'formSelects']
         })
     });
 
+    formSelects.btns('layui_select', ['remove']);
+    formSelects.maxTips('layui_select', function(id, vals, val, max){
+        layer.alert("选超了!!!");
+    });
+
     formSelects.render('layui_select');
 });
