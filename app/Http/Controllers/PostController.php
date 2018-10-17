@@ -3,17 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Models\Post;
-use App\Http\Models\Topic;
 use App\Http\Requests\PostRequest;
+use App\Repositories\PostRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Auth;
+use DB;
 
 class PostController extends Controller
 {
-    public function __construct()
+    protected $postRepository;
+
+    public function __construct(PostRepository $postRepository)
     {
-        $this->middleware('auth' , ['only' => ['create' , 'store' , 'edit' , 'update' , 'destory']]);
+        $this->middleware('auth', ['only' => ['create', 'store', 'edit', 'update', 'destory', 'imageUpload']]);
+        $this->postRepository = $postRepository;
     }
     /**
      * Display a listing of the resource.
@@ -22,7 +25,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -32,8 +35,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        $topics = Topic::all();
-        return view('post.create', compact('topics'));
+        $topics  = $this->postRepository->getAllTopics();
+        $columns = $this->postRepository->getColumns();
+        return view('post.create', compact('topics', 'columns'));
     }
 
     /**
@@ -44,28 +48,18 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
-        $topics = explode(',', $request->get('topic'));
-        $topics = $this->normalizeTopic($topics);
+        $topics = $this->postRepository->normalizeTopic($request->get('topic'));
         $data = [
+            'column'  => $request->get('column'),
             'title'   => $request->get('title'),
             'content' => $request->get('content'),
             'user_id' => Auth::user()->id,
         ];
-        $post = Post::create($data);
+        $post = $this->postRepository->create($data);
         $post->topics()->attach($topics);
         return redirect()->route('post.show', [$post->id]);
     }
 
-    public function normalizeTopic(array $topics)
-    {
-        return collect($topics)->map(function ($topic) {
-            if ( strpos($topic, '/**') === false ) {
-                return (int) $topic;
-            }
-            $newTopic = Topic::create(['name' => explode('/', $topic)[0]]);
-            return $newTopic->id;
-        })->toArray();
-    }
 
     /**
      * Display the specified resource.
@@ -75,8 +69,10 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::where('id', $id)->with('topics')->first();
-        return view('post.show' , compact('post'));
+        $post    = $this->postRepository->byId($id);
+        DB::table('posts')->where('id' , $post->id)->increment('views');
+        $columns = $this->postRepository->getColumns();
+        return view('post.show', compact('post', 'columns'));
     }
 
     /**
@@ -87,7 +83,14 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post    = $this->postRepository->byId($id);
+        if (!Auth::user()->owns($post)){
+            return back();
+        }
+        $topics  = $this->postRepository->getAllTopics();
+        $columns = $this->postRepository->getColumns();
+        $select_topics = $this->postRepository->dealSelectTopics($post->topics);
+        return view('post.edit', compact('post', 'topics', 'columns', 'select_topics'));
     }
 
     /**
@@ -99,7 +102,18 @@ class PostController extends Controller
      */
     public function update(PostRequest $request, $id)
     {
-        //
+        $post    = $this->postRepository->byId($id);
+        if (!Auth::user()->owns($post)){
+            return back();
+        }
+        $topics = $this->postRepository->normalizeTopic($request->get('topic'));
+        $post->update([
+            'column'  => $request->get('column'),
+            'title'   => $request->get('title'),
+            'content' => $request->get('content'),
+        ]);
+        $post->topics()->sync($topics);
+        return redirect()->route('post.show', [$post->id]);
     }
 
     /**
@@ -110,7 +124,12 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = $this->postRepository->byId($id);
+        if (!Auth::user()->owns($post)){
+            return back();
+        }
+        $post->delete();
+        return redirect()->route('post.column', ['column' => $post->column]);
     }
 
     /**
@@ -127,20 +146,14 @@ class PostController extends Controller
 
     public function topics(Request $request)
     {
-        $result = [];
-        if ($request->get('keyword')){
-            $topics = Topic::where('name', 'like', '%'.$request->get('keyword').'%')->get();
-            $result[] = ['name' => $request->get('keyword'), 'value' => $request->get('keyword').'/**'];
-        }else{
-            $topics = Topic::all();
-        }
-
-        foreach ($topics as $v){
-            $result[] = array(
-                'name'  => $v['name'],
-                'value' => $v['id']
-            );
-        }
+        $result = $this->postRepository->searchTopics($request->get('keyword'));
         return $this->returnMsg(0, $result, 'success');
+    }
+
+    public function column($column)
+    {
+        $posts = $this->postRepository->getPostsByColumn($column);
+        $columns = $this->postRepository->getColumns();
+        return view('post.column' , compact('posts', 'columns'));
     }
 }

@@ -18,6 +18,8 @@ class CreatePostTable extends Migration
             $table->string('title');
             $table->text('content');
             $table->integer('user_id')->unsigned();
+            $table->smallInteger('column')->default(0);
+            $table->integer('views')->default(0);
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Models\Post;
 use App\Http\Services\Email;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -43,5 +44,19 @@ class User extends Authenticatable
         ];
 
         Email::SendCloud($data, $this, 'xiaohtstyle_reset_password');
+    }
+
+    /**
+     * 关联post表
+     * @return $this
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class , 'user_id' , 'id')->orderBy('created_at' , 'desc');
+    }
+
+    public function owns($model)
+    {
+        return (int) $this->id === (int) $model->user_id;
     }
 }
