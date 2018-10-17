@@ -69,7 +69,7 @@ class PostController extends Controller
     public function show($id)
     {
         $post    = $this->postRepository->byId($id);
-        DB::table('posts')->where('id' , $post->id)->increment('views');
+        $post->increment('views');
         $columns = $this->postRepository->getColumns();
         return view('post.show', compact('post', 'columns'));
     }
@@ -158,6 +158,17 @@ class PostController extends Controller
 
     public function comment(Request $request, $post)
     {
+        $this->validate($request, [
+            'content' => 'required|min:6',
+        ]);
 
+        $comment = $this->postRepository->comment(
+            [
+                'post_id' => $post,
+                'user_id' => Auth::id(),
+                'content' => $request->get('content')
+            ]
+        );
+        return back();
     }
 }

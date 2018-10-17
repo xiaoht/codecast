@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Http\Models\Comment;
 use App\Http\Models\Post;
 use App\Http\Models\Topic;
 
@@ -14,7 +15,7 @@ class PostRepository
      */
     public function byId($id)
     {
-        $post    = Post::where('id', $id)->with(['topics', 'user'])->first();
+        $post    = Post::where('id', $id)->with(['topics', 'user', 'comments'])->first();
         return $post;
     }
 
@@ -109,10 +110,26 @@ class PostRepository
         return $data;
     }
 
+    /**
+     * 通过专栏获取文章
+     * @param $column
+     * @return mixed
+     */
     public function getPostsByColumn($column)
     {
         $posts = Post::where('column' , $column)->orderBy('created_at' ,  'desc')->with('user')->paginate(10);
         return $posts;
     }
+
+    /**
+     * 提交评论
+     * @param array $attributes
+     */
+    public function comment(array $attributes)
+    {
+        Comment::create($attributes);
+    }
+
+
 
 }
