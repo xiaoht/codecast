@@ -419,7 +419,6 @@ class ComposerStaticInit80eafd2db8b7908bb30adb0b32093cfe
     );
 
     public static $classMap = array (
-        'App\\Comment' => __DIR__ . '/../..' . '/app/Comment.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Admin\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/HomeController.php',
@@ -437,6 +436,7 @@ class ComposerStaticInit80eafd2db8b7908bb30adb0b32093cfe
         'App\\Http\\Middleware\\TrimStrings' => __DIR__ . '/../..' . '/app/Http/Middleware/TrimStrings.php',
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
+        'App\\Http\\Models\\Comment' => __DIR__ . '/../..' . '/app/Http/Models/Comment.php',
         'App\\Http\\Models\\Model' => __DIR__ . '/../..' . '/app/Http/Models/Model.php',
         'App\\Http\\Models\\Post' => __DIR__ . '/../..' . '/app/Http/Models/Post.php',
         'App\\Http\\Models\\Topic' => __DIR__ . '/../..' . '/app/Http/Models/Topic.php',
@@ -449,6 +449,7 @@ class ComposerStaticInit80eafd2db8b7908bb30adb0b32093cfe
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
         'App\\Repositories\\PostRepository' => __DIR__ . '/../..' . '/app/Repositories/PostRepository.php',
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
+        'App\\Zan' => __DIR__ . '/../..' . '/app/Zan.php',
         'ArithmeticError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
         'AssertionError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
         'Barryvdh\\LaravelIdeHelper\\Alias' => __DIR__ . '/..' . '/barryvdh/laravel-ide-helper/src/Alias.php',

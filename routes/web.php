@@ -19,7 +19,9 @@ Route::get('/email/verify/{token}', 'EmailController@verify')->name('email.verif
 Route::resource('post' , 'PostController');
 Route::post('/post/imageUpload' , 'PostController@imageUpload');
 Route::get('/v{column}', 'PostController@column')->name('post.column');
-Route::post('/post/{post}/comment', 'PostController@comment')->name('post.comment');
+Route::post('/post/{post_id}/comment', 'PostController@comment')->name('post.comment');
+Route::get('/post/{post_id}/zan' , 'PostController@zan')->name('post.zan');
+Route::get('/post/{post_id}/unzan' , 'PostController@unzan')->name('post.unzan');
 
 Route::namespace('Admin')->group(function (){
     Route::group(['prefix' => 'admin'], function() {

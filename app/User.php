@@ -69,4 +69,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
+
+    /**
+     * 关联zan表
+     * @return $this
+     */
+    public function zans()
+    {
+        return $this->hasMany(Zan::class)->orderBy('created_at' , 'desc');
+    }
 }

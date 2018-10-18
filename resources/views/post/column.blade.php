@@ -3,9 +3,9 @@
     <div class="fly-panel" style="margin-bottom: 0;">
 
         <div class="fly-panel-title fly-filter">
-            <a href="" class="layui-this">综合</a>
+            <a href="javascript:void(0)" class="layui-this">综合</a>
             <span class="fly-filter-right layui-hide-xs">
-            <a href="" class="layui-this">按最新</a>
+            <a href="javascript:void(0)" class="layui-this">按最新</a>
           </span>
         </div>
 
@@ -25,7 +25,9 @@
                         </a>
                         <span>{{ $post->created_at->diffForHumans() }}</span>
                         <span class="fly-list-nums">
+                            <i class="iconfont icon-pinglun1" title="回答"></i> {{ count($post->comments) }}
                             <i class="iconfont" title="人气">&#xe60b;</i> {{ $post->views }}
+                            <i class="iconfont icon-zan"></i> {{ count($post->zans) }}
                         </span>
                     </div>
                 </li>

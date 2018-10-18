@@ -14,7 +14,7 @@ class PostController extends Controller
 
     public function __construct(PostRepository $postRepository)
     {
-        $this->middleware('auth', ['only' => ['create', 'store', 'edit', 'update', 'destory', 'imageUpload']]);
+        $this->middleware('auth', ['only' => ['create', 'store', 'edit', 'update', 'destory', 'imageUpload', 'comment', 'zan', 'unzan']]);
         $this->postRepository = $postRepository;
     }
     /**
@@ -156,19 +156,35 @@ class PostController extends Controller
         return view('post.column' , compact('posts', 'columns'));
     }
 
-    public function comment(Request $request, $post)
+    public function comment(Request $request, $post_id)
     {
         $this->validate($request, [
             'content' => 'required|min:6',
         ]);
 
-        $comment = $this->postRepository->comment(
+        $this->postRepository->comment(
             [
-                'post_id' => $post,
+                'post_id' => $post_id,
                 'user_id' => Auth::id(),
                 'content' => $request->get('content')
             ]
         );
+        return back();
+    }
+
+    public function zan($post_id)
+    {
+        $params = [
+            'user_id' => Auth::id(),
+            'post_id' => $post_id
+        ];
+        $this->postRepository->zan($params);
+        return back();
+    }
+    public function unzan($post_id)
+    {
+        $post = $this->postRepository->byId($post_id);
+        $post->zan(Auth::id())->delete();
         return back();
     }
 }

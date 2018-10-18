@@ -4,12 +4,16 @@
     <div class="fly-panel detail-box">
         <h1>{{ $post->title }}</h1>
         <div class="fly-detail-info">
-            <span class="layui-badge layui-bg-green">话题 </span>
+            <span class="layui-badge layui-bg-blue">{{ $columns[$post->column] }}</span>
             @foreach($post->topics as $topic)
                 <span class="layui-badge layui-bg-red">{{ $topic->name }}</span>
             @endforeach
             <span class="fly-list-nums">
+                <i class="iconfont" title="回答">&#xe60c;</i> {{ count($post->comments) }}
                 <i class="iconfont" title="人气">&#xe60b;</i> {{ $post->views }}
+                <span class="jieda-zan" type="zan">
+                    <i class="iconfont icon-zan"></i>{{ count($post->zans) }}
+                </span>
             </span>
         </div>
         <div class="detail-about">
@@ -23,15 +27,19 @@
                 <span>{{ $post->created_at->toDateTimeString() }}</span>
             </div>
             <div class="detail-hits">
-                <span class="jieda-zan zanok">
-                    <a href="" class="iconfont icon-zan"></a>
-                    <em>取消关注！</em>
-                </span>
-                <span class="jieda-zan">
-                    <a href="" class="iconfont icon-zan"></a>
-                    <em>关注收藏！</em>
-                </span>
-                <span class="layui-badge layui-bg-blue">{{ $columns[$post->column] }}</span>
+                @if($post->zan(\Auth::id())->exists())
+                    <span class="jieda-zan zanok">
+                        <a href="{{ route('post.unzan' , ['post_id' => $post->id])}}" class="iconfont icon-zan">
+                            <em>取消关注！</em>
+                        </a>
+                    </span>
+                @else
+                    <span class="jieda-zan">
+                        <a href="{{ route('post.zan' , ['post_id' => $post->id])}}" class="iconfont icon-zan">
+                            <em>关注收藏！</em>
+                        </a>
+                    </span>
+                @endif
                 @if(Auth::check() && Auth::user()->owns($post))
                     <span class="layui-btn layui-btn-xs jie-admin"><a href="{{ route('post.edit', ['id' => $post->id]) }}">编辑此贴</a></span>
                     <span class="layui-btn layui-btn-xs jie-admin" type="edit" onclick="event.preventDefault();document.getElementById('delete-post').submit();">删除此帖</span>
@@ -54,7 +62,7 @@
             <a href="{{ route('login') }}" class="layui-btn layui-btn-fluid" style="width: 100%">快去登陆评论吧！！！</a>
         @else
             <div class="layui-form layui-form-pane">
-            {!! Form::open(['url' => route('post.comment', [$post]), 'method' => 'post']) !!}
+            {!! Form::open(['url' => route('post.comment', ['post_id' => $post->id]), 'method' => 'post']) !!}
                 <div class="layui-form-item layui-form-text">
                     <div class="layui-input-block">
                         {!! Form::text('content' , old('content') , ['lay-verify' => 'required', 'placeholder' => "详细描述", 'class' => 'layui-textarea fly-editor', 'style' => 'height:260px', 'id' => 'L_content']) !!}

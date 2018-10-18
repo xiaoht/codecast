@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Http\Models\Comment;
 use App\Http\Models\Post;
 use App\Http\Models\Topic;
+use App\Http\Models\Zan;
 
 class PostRepository
 {
@@ -130,6 +131,12 @@ class PostRepository
         Comment::create($attributes);
     }
 
-
-
+    /**
+     * 点赞
+     * @param array $attributes
+     */
+    public function zan(array $attributes)
+    {
+        Zan::firstOrCreate($attributes);
+    }
 }
