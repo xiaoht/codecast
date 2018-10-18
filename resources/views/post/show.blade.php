@@ -40,13 +40,15 @@
                         </a>
                     </span>
                 @endif
-                @if(Auth::check() && Auth::user()->owns($post))
+                @can('update', $post)
                     <span class="layui-btn layui-btn-xs jie-admin"><a href="{{ route('post.edit', ['id' => $post->id]) }}">编辑此贴</a></span>
+                @endcan
+                @can('delete', $post)
                     <span class="layui-btn layui-btn-xs jie-admin" type="edit" onclick="event.preventDefault();document.getElementById('delete-post').submit();">删除此帖</span>
                     {!! Form::open(['url' => route('post.destroy' , ['id' => $post->id]) , 'method' => 'DELETE ' , 'style' => 'display:none' , 'id' => 'delete-post']) !!}
                         {!! Form::hidden('_method' , 'DELETE') !!}
                     {!! Form::close() !!}
-                @endif
+                @endcan
             </div>
         </div>
         <div class="detail-body photos">

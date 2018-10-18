@@ -83,9 +83,10 @@ class PostController extends Controller
     public function edit($id)
     {
         $post    = $this->postRepository->byId($id);
-        if (!Auth::user()->owns($post)){
+        /*if (!Auth::user()->owns($post)){
             return back();
-        }
+        }*/
+        $this->authorize('update', $post);
         $topics  = $this->postRepository->getAllTopics();
         $columns = $this->postRepository->getColumns();
         $select_topics = $this->postRepository->dealSelectTopics($post->topics);
@@ -102,9 +103,10 @@ class PostController extends Controller
     public function update(PostRequest $request, $id)
     {
         $post    = $this->postRepository->byId($id);
-        if (!Auth::user()->owns($post)){
+        /*if (!Auth::user()->owns($post)){
             return back();
-        }
+        }*/
+        $this->authorize('update', $post);
         $topics = $this->postRepository->normalizeTopic($request->get('topic'));
         $post->update([
             'column'  => $request->get('column'),
@@ -124,9 +126,10 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = $this->postRepository->byId($id);
-        if (!Auth::user()->owns($post)){
+        /*if (!Auth::user()->owns($post)){
             return back();
-        }
+        }*/
+        $this->authorize('delete', $post);
         $post->delete();
         return redirect()->route('post.column', ['column' => $post->column]);
     }
