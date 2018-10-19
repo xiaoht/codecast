@@ -23,6 +23,8 @@ Route::post('/post/{post_id}/comment', 'PostController@comment')->name('post.com
 Route::get('/post/{post_id}/zan' , 'PostController@zan')->name('post.zan');
 Route::get('/post/{post_id}/unzan' , 'PostController@unzan')->name('post.unzan');
 
+Route::get('/user/{user}/home' , 'UserController@home')->name('user.home');
+
 Route::namespace('Admin')->group(function (){
     Route::group(['prefix' => 'admin'], function() {
         Route::get('/', 'HomeController@index')->name('admin.home');

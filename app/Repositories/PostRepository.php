@@ -16,7 +16,7 @@ class PostRepository
      */
     public function byId($id)
     {
-        $post    = Post::where('id', $id)->with(['topics', 'user', 'comments'])->first();
+        $post    = Post::where('id', $id)->with(['topics', 'user', 'comments', 'comments.user'])->first();
         return $post;
     }
 
