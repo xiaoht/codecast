@@ -23,7 +23,7 @@
             @else
                 <li class="layui-nav-item">
                     <a class="fly-nav-avatar" href="javascript:;">
-                        <cite class="layui-hide-xs">贤心</cite>
+                        <cite class="layui-hide-xs">{{ Auth::user()->name }}</cite>
                         <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
                     </a>
                     <dl class="layui-nav-child">
