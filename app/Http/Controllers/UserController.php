@@ -15,4 +15,14 @@ class UserController extends Controller
     {
         return view('user.home');
     }
+
+    public function fan()
+    {
+
+    }
+
+    public function unfan()
+    {
+        
+    }
 }
