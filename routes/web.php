@@ -28,8 +28,6 @@ Route::get('/post/{post_id}/unzan' , 'PostController@unzan')->name('post.unzan')
 
 //个人中心
 Route::get('/user/{user}/home' , 'UserController@home')->name('user.home');
-Route::get('/user/{user}/fan' , 'UserController@fan')->name('user.fan');
-Route::get('/user/{user}/unfan' , 'UserController@unfan')->name('user.unfan');
 
 Route::namespace('Admin')->group(function (){
     Route::group(['prefix' => 'admin'], function() {

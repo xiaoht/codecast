@@ -79,45 +79,41 @@ layui.use(['element', 'form', 'layedit', 'util', 'carousel', 'formSelects', 'lay
 
     formSelects.render('layui_select');
 
-    $(".like-button").click(function(event){
-        target = $(event.target)
-        var current_like = target.attr("like-value");
-        var user_id = target.attr("like-user");
-        // 已经关注了
+    $('.like-button').click(function(){
+        var target = $(this)
+        var current_like = target.attr('like-value');
+        var star_id = target.attr('like-user');
+        var fan_id = target.attr('current-user');
         if (current_like == 1) {
-            // 取消关注
             $.ajax({
-                    url: "/user/" + user_id + "/unfan",
-                    method: "POST",
-                    //data: {"_token": _token},
-                    dataType: "json",
-                    success: function(data) {
-                        if (data.error != 0) {
-                            layer.alert(data.msg);
-                            return;
-                        }
-                        target.attr("like-value", 0);
-                        target.text("关注")
+                url: '/api/user/unfan',
+                data:{'star_id' : star_id, 'fan_id' : fan_id},
+                method: 'POST',
+                dataType: 'json',
+                success: function(data) {
+                    if (data.code != 200) {
+                        layer.alert(data.msg);
+                        return;
                     }
+                    target.attr('like-value', 0);
+                    target.html('加为好友')
                 }
-            );
+            });
         } else {
-            // 取消关注
             $.ajax({
-                    url: "/user/" + user_id + "/fan",
-                    method: "POST",
-                    //data: {"_token": _token},
-                    dataType: "json",
-                    success: function(data) {
-                        if (data.error != 0) {
-                            layer.alert(data.msg);
-                            return;
-                        }
-                        target.attr("like-value", 1);
-                        target.text("取消关注")
+                url: '/api/user/fan',
+                data:{'star_id' : star_id, 'fan_id' : fan_id},
+                method: 'POST',
+                dataType: 'json',
+                success: function(data) {
+                    if (data.code != 200) {
+                        layer.alert(data.msg);
+                        return;
                     }
+                    target.attr('like-value', 1);
+                    target.html('取消关注')
                 }
-            );
+            });
         }
     });
 });

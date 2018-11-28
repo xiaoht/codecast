@@ -6,7 +6,6 @@ use App\Http\Requests\PostRequest;
 use App\Repositories\PostRepository;
 use Illuminate\Http\Request;
 use Auth;
-use DB;
 
 class PostController extends Controller
 {

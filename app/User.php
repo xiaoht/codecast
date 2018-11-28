@@ -95,7 +95,7 @@ class User extends Authenticatable
      */
     public function stars()
     {
-        return $this->hasMany(Fan::class, 'star_id', 'id');
+        return $this->hasMany(Fan::class, 'fan_id', 'id');
     }
 
     /**

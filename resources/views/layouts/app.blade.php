@@ -31,7 +31,7 @@
 @include('layouts.footer')
 
 <script src="{{ asset('fly/res/layui/layui.js') }}"></script>
-<script src="{{ elixir('/js/app.js') }}"></script>
+<script src="{{ asset('/js/common.js') }}"></script>
 @include('layouts.alert')
 
 </body>

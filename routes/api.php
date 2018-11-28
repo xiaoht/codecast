@@ -13,8 +13,10 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+/*Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
-});
+});*/
 
 Route::get('/topics', 'PostController@topics')->name('api.topics');
+Route::post('/user/fan' , 'UserController@fan');
+Route::post('/user/unfan' , 'UserController@unfan');
