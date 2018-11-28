@@ -139,6 +139,6 @@ class User extends Authenticatable
      */
     public function hasStar($uid)
     {
-        return $this->fans()->where('star_id', $uid)->count();
+        return $this->stars()->where('star_id', $uid)->count();
     }
 }
