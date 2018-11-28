@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Models\Fan;
 use App\User;
+use Auth;
 
 class UserController extends Controller
 {
@@ -23,13 +25,20 @@ class UserController extends Controller
         return view('user.home', compact('user', 'posts', 'comments', 'fusers', 'susers'));
     }
 
-    public function fan()
+    public function fan(User $user)
     {
+        try{
+            $me = Auth::user();
+            Fan::firstOrCreate(['fan_id' => $me->id, 'star_id' => $user->id]);
+        }catch (\Exception $e){
+            return $this->returnMsg('403', $e->getMessage());
+        }
 
     }
 
     public function unfan()
     {
-        
+        $me = Auth::user();
+        Fan::where('fan_id', $me->id)->where('star_id', $user->id)->delete();
     }
 }
