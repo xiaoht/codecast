@@ -21,7 +21,7 @@
                 <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name }}">
             </a>
             <div class="fly-detail-user">
-                <a href="../user/home.html" class="fly-link">
+                <a href="{{ route('user.home', [$post->user]) }}" class="fly-link">
                     <cite>{{ $post->user->name }}</cite>
                 </a>
                 <span>{{ $post->created_at->toDateTimeString() }}</span>

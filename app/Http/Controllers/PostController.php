@@ -183,6 +183,7 @@ class PostController extends Controller
         $this->postRepository->zan($params);
         return back();
     }
+
     public function unzan($post_id)
     {
         $post = $this->postRepository->byId($post_id);
