@@ -25,6 +25,8 @@ Route::get('/v{column}', 'PostController@column')->name('post.column');
 Route::post('/post/{post_id}/comment', 'PostController@comment')->name('post.comment');
 Route::get('/post/{post_id}/zan' , 'PostController@zan')->name('post.zan');
 Route::get('/post/{post_id}/unzan' , 'PostController@unzan')->name('post.unzan');
+Route::get('/topic/{topic}' , 'PostController@topic')->name('post.unzan');
+Route::post('/topic/{topic}/submit' , 'PostController@topic_submit')->name('post.unzan');
 
 //个人中心
 Route::get('/user/{user}/home' , 'UserController@home')->name('user.home');
